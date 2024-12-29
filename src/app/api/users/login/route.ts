@@ -2,6 +2,8 @@ import { connectDB } from "@/config/db";
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/models/user.model";
 import jwt from "jsonwebtoken";
+import { TOKEN_KEY } from "@/config";
+import { TokenPayload } from "@/types/auth";
 
 connectDB();
 
@@ -30,7 +32,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const tokenData = {
+    const tokenData: TokenPayload = {
       id: user._id,
       email,
     };
@@ -44,7 +46,7 @@ export async function POST(request: NextRequest) {
       success: true,
     });
 
-    response.cookies.set("token", token, {
+    response.cookies.set(TOKEN_KEY, token, {
       httpOnly: true,
     });
 

@@ -1,11 +1,8 @@
+import { TOKEN_KEY } from "@/config";
 import { connectDB } from "@/config/db";
 import { NextResponse } from "next/server";
 
 connectDB();
-
-const TOKEN_SECRET = process.env.TOKEN_SECRET;
-
-if (!TOKEN_SECRET) throw new Error("TOKEN_SECRET NOT IN ENV");
 
 export async function GET() {
   try {
@@ -18,7 +15,7 @@ export async function GET() {
         status: 200,
       }
     );
-    response.cookies.set("token", "", {
+    response.cookies.set(TOKEN_KEY, "", {
       httpOnly: true,
       expires: new Date(0),
     });
