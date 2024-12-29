@@ -1,3 +1,4 @@
+import { TOKEN_KEY } from "@/config";
 import { sendEmail } from "@/lib/mailer";
 import { getHasedToken } from "@/lib/utils";
 import User from "@/models/user.model";
@@ -7,8 +8,10 @@ export const sendVerificationEmail = async (userId: string) => {
     const verifyToken = await getHasedToken(userId.toString());
     const verifyTokenExpiry = Date.now() + 3600000;
     const user = await User.findByIdAndUpdate(userId, {
-      verifyToken,
-      verifyTokenExpiry,
+      $set: {
+        verifyToken,
+        verifyTokenExpiry,
+      },
     });
     if (!user) {
       return false;
@@ -17,7 +20,7 @@ export const sendVerificationEmail = async (userId: string) => {
     await sendEmail({
       to: email,
       subject: "User Sign up success",
-      text: `Verify using ${process.env.DOMAIN}/verify/${verifyToken}`,
+      text: `Verify using ${process.env.DOMAIN}/verify?${TOKEN_KEY}=${verifyToken}`,
     });
     console.log("An Verification Email has been sent to ", email);
     return true;

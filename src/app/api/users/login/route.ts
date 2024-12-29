@@ -24,10 +24,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!user?.isisVerified) {
+      return NextResponse.json(
+        { message: "Please Verify Your Email First" },
+        { status: 404 }
+      );
+    }
     const validPassword = await user.comparePassword(password);
     if (!validPassword) {
       return NextResponse.json(
-        { error: "email and password is mandetory" },
+        { error: "email or password is incorrect" },
         { status: 400 }
       );
     }
