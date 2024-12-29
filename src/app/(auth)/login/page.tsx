@@ -2,10 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/common/use-toast";
 import { useRouter } from "next/navigation";
 import { FormEvent, useMemo, useState } from "react";
 import axios from "axios";
+import { AUTH_APIS } from "@/lib/api";
 
 export default function Login() {
   const { toast } = useToast();
@@ -26,11 +27,14 @@ export default function Login() {
     e.preventDefault();
     setBtnLoading(true);
     try {
-      const payload = {
+      const data = {
         email,
         password,
       };
-      const resp = await axios.post("/api/users/login/", payload);
+      await axios({
+        ...AUTH_APIS["login"],
+        data,
+      });
       toast({
         title: "Login Successful",
       });

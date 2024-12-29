@@ -1,10 +1,11 @@
 "use client";
 
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/common/use-toast";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { FormEvent } from "react";
+import { AUTH_APIS } from "@/lib/api";
 
 export default function Verify() {
   const { toast } = useToast();
@@ -22,7 +23,10 @@ export default function Verify() {
       return;
     }
     try {
-      await axios.post("/api/users/verify", { token });
+      await axios({
+        ...AUTH_APIS["verify"],
+        data: { token },
+      });
       router.push("/login");
     } catch (error: any) {
       toast({

@@ -2,10 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/common/use-toast";
 import { useRouter } from "next/navigation";
 import { FormEvent, useMemo, useState } from "react";
 import axios from "axios";
+import { AUTH_APIS } from "@/lib/api";
 
 export default function Signup() {
   const { toast } = useToast();
@@ -27,12 +28,14 @@ export default function Signup() {
     e.preventDefault();
     setBtnLoading(true);
     try {
-      const payload = {
-        name,
-        email,
-        password,
-      };
-      const resp = await axios.post("/api/users/signup/", payload);
+      await axios({
+        ...AUTH_APIS["signUp"],
+        data: {
+          name,
+          email,
+          password,
+        },
+      });
       toast({
         title: "Sign up Success",
         description: "Please verify email",
