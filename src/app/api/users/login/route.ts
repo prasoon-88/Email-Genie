@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!user?.isisVerified) {
+    if (!user?.isVerified) {
       return NextResponse.json(
         { message: "Please Verify Your Email First" },
         { status: 404 }
