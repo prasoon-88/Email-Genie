@@ -20,7 +20,7 @@ export const sendVerificationEmail = async (userId: string) => {
     await sendEmail({
       to: email,
       subject: "User Sign up success",
-      text: `Verify using ${process.env.DOMAIN}/verify?${TOKEN_KEY}=${verifyToken}`,
+      text: `Verify using ${process.env.NEXT_PUBLIC_API_URL}verify?${TOKEN_KEY}=${verifyToken}`,
     });
     console.log("An Verification Email has been sent to ", email);
     return true;
