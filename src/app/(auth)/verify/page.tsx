@@ -27,6 +27,11 @@ export default function Verify() {
         ...AUTH_APIS["verify"],
         data: { token },
       });
+      toast({
+        title: "Your Email is Verified!",
+        description:
+          "Thank you for verifying your email. Your account is now active and ready to use.",
+      });
       router.push("/login");
     } catch (error: any) {
       toast({
@@ -36,8 +41,9 @@ export default function Verify() {
     }
   };
   return (
-    <form className="flex items-center justify-center mt-40">
-      <Button onClick={onVerify}>Verify</Button>
+    <form className="flex flex-col gap-y-4 text-center justify-center">
+      <p className="text-2xl">Press continue to Veirfy yourself</p>
+      <Button onClick={onVerify}>Continue</Button>
     </form>
   );
 }
