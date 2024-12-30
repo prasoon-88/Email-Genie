@@ -1,7 +1,26 @@
-import { TOKEN_KEY } from "@/config";
-import { sendEmail } from "@/lib/mailer";
-import { getHasedToken } from "@/lib/utils";
+import jwt from "jsonwebtoken";
+import { getHasedToken } from "..";
 import User from "@/models/user.model";
+import { sendEmail } from "../mailer";
+import { TOKEN_KEY } from "@/config";
+
+export const verifyToken = (token: string) => {
+  try {
+    return jwt.verify(token, process.env.TOKEN_SECRET!);
+  } catch (error) {
+    console.log(error);
+  }
+  return null;
+};
+
+export const getDataFromToken = async (token: string) => {
+  const payload: any = verifyToken(token);
+  if (!payload?.id) {
+    return null;
+  }
+  const user = await User.findById(payload?.id).select("-password");
+  return user;
+};
 
 export const sendVerificationEmail = async (userId: string) => {
   try {

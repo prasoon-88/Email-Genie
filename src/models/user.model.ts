@@ -45,7 +45,7 @@ userSchema.methods.comparePassword = async function (enteredPassword: string) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-const User = mongoose.models.users || mongoose.model("users", userSchema);
+const User = mongoose?.models?.users || mongoose.model("users", userSchema);
 
 // Singleton
 export default Object.freeze(User);

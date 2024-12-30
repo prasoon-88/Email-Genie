@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { TOKEN_KEY } from "@/config";
 import { connectDB } from "@/config/db";
-import { getDataFromToken } from "@/lib/api/getDataFromToken";
-import User from "@/models/user.model";
+import { getDataFromToken } from "@/utils/api/auth";
 
 connectDB();
 
@@ -20,9 +19,7 @@ export async function GET(request: NextRequest) {
         }
       );
     }
-    const id = getDataFromToken(token);
-
-    const user = await User.findById(id).select("-password");
+    const user = await getDataFromToken(token);
 
     if (!user) {
       return NextResponse.json(
