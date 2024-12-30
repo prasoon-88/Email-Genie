@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
-import { getHasedToken } from "..";
 import User from "@/models/user.model";
 import { sendEmail } from "../mailer";
 import { TOKEN_KEY } from "@/config";
+import { getHasedToken } from "..";
 
 export const verifyToken = (token: string) => {
   try {

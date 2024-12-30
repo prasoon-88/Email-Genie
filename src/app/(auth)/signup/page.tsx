@@ -6,7 +6,7 @@ import { useToast } from "@/hooks/common/use-toast";
 import { useRouter } from "next/navigation";
 import { FormEvent, useMemo, useState } from "react";
 import axios from "axios";
-import { AUTH_APIS } from "@/utils/api";
+import { AUTH_APIS } from "@/utils/apis";
 import { Label } from "@radix-ui/react-label";
 import { Line } from "../layout";
 import Link from "next/link";

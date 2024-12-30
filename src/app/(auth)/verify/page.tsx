@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { FormEvent } from "react";
-import { AUTH_APIS } from "@/utils/api";
+import { AUTH_APIS } from "@/utils/apis";
 
 export default function Verify() {
   const { toast } = useToast();
