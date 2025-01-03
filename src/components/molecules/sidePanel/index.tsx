@@ -16,14 +16,7 @@ import {
 } from "lucide-react";
 import clsx from "clsx";
 import { useUserContent } from "@/providers/userProvider";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { getInitial } from "@/utils";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@radix-ui/react-tooltip";
 import TooltipContainer from "../tooltip";
 
 interface Toggler extends HTMLAttributes<HTMLDivElement> {
@@ -89,26 +82,32 @@ const UserBox = ({ isOpen }: { isOpen: boolean }) => {
   }, []);
   return (
     <>
-      <div className="flex gap-x-2 px-2 py-1 rounded-sm">
+      <div className="flex gap-x-2 px-2 py-1 rounded-sm overflow-hidden">
         <TooltipContainer tooltip={name}>
           <div className="w-12 rounded-sm grid items-center justify-center aspect-square bg-zinc-800">
             {initial}
           </div>
         </TooltipContainer>
-        <div>
-          <div className="text-zinc-300">{name}</div>
-          <div className="text-zinc-500 text-sm">{email}</div>
-        </div>
+        {isOpen ? (
+          <div>
+            <div className="text-zinc-300">{name}</div>
+            <div className="text-zinc-500 text-sm">{email}</div>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
-      <Button
-        size="lg"
-        variant="destructive"
-        onClick={onLogout}
-        className="p-0"
-      >
-        <LogOut size={24} />
-        {isOpen ? <span>Logout</span> : <></>}
-      </Button>
+      <div className="flex gap-2">
+        <Button
+          size="lg"
+          variant="destructive"
+          onClick={onLogout}
+          className="p-0 w-full"
+        >
+          <LogOut size={24} />
+          {isOpen ? <span>Logout</span> : <></>}
+        </Button>
+      </div>
     </>
   );
 };
