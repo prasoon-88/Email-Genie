@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
         success: true,
       },
       {
-        status: 403,
+        status: 200,
       }
     );
   } catch (error) {

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { HTMLAttributes, memo, ReactNode, useCallback } from "react";
+import { HTMLAttributes, memo, ReactNode, useCallback, useMemo } from "react";
 import { SIDE_PANEL_TABS, SIDE_PANEL_WIDTH } from "./helper";
 import axios from "axios";
 import { AUTH_APIS } from "@/utils/apis";
@@ -15,6 +15,16 @@ import {
   Sparkles,
 } from "lucide-react";
 import clsx from "clsx";
+import { useUserContent } from "@/providers/userProvider";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { getInitial } from "@/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@radix-ui/react-tooltip";
+import TooltipContainer from "../tooltip";
 
 interface Toggler extends HTMLAttributes<HTMLDivElement> {
   isOpen: boolean;
@@ -60,11 +70,12 @@ export const Tab = ({ label, icon, link, showOnlyIcon, centerAlign }: Tab) => {
   );
 };
 
-interface SidePanel extends Toggler {}
-
-const SidePanel = memo((props: SidePanel) => {
-  const { isOpen } = props;
+const UserBox = ({ isOpen }: { isOpen: boolean }) => {
   const router = useRouter();
+
+  const { userInfo, isLoading } = useUserContent();
+  const { name, email } = userInfo ?? {};
+  const initial = useMemo(() => getInitial(name), [name]);
 
   const onLogout = useCallback(async () => {
     try {
@@ -76,6 +87,37 @@ const SidePanel = memo((props: SidePanel) => {
       console.log(error);
     }
   }, []);
+  return (
+    <>
+      <div className="flex gap-x-2 px-2 py-1 rounded-sm">
+        <TooltipContainer tooltip={name}>
+          <div className="w-12 rounded-sm grid items-center justify-center aspect-square bg-zinc-800">
+            {initial}
+          </div>
+        </TooltipContainer>
+        <div>
+          <div className="text-zinc-300">{name}</div>
+          <div className="text-zinc-500 text-sm">{email}</div>
+        </div>
+      </div>
+      <Button
+        size="lg"
+        variant="destructive"
+        onClick={onLogout}
+        className="p-0"
+      >
+        <LogOut size={24} />
+        {isOpen ? <span>Logout</span> : <></>}
+      </Button>
+    </>
+  );
+};
+
+interface SidePanel extends Toggler {}
+
+const SidePanel = memo((props: SidePanel) => {
+  const { isOpen } = props;
+
   return (
     <div
       className={clsx(
@@ -117,15 +159,7 @@ const SidePanel = memo((props: SidePanel) => {
       </div>
       <div className="w-100 grid gap-y-4">
         <hr className="text-blue-100" />
-        <Button
-          size="lg"
-          variant="destructive"
-          onClick={onLogout}
-          className="p-0"
-        >
-          <LogOut size={24} />
-          {isOpen ? <span>Logout</span> : <></>}
-        </Button>
+        <UserBox isOpen={isOpen} />
       </div>
     </div>
   );

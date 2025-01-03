@@ -8,3 +8,12 @@ export function cn(...inputs: ClassValue[]) {
 
 export const getHasedToken = async (value: string) =>
   await bcryptjs.hash(value, 10);
+
+export const getInitial = (name?: string) => {
+  if (!name?.length) return "";
+  const spaceSeperatedName = name.split(" ");
+  return spaceSeperatedName.reduce(
+    (acc, value) => acc + (value?.[0] ?? ""),
+    ""
+  );
+};

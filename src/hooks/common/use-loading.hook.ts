@@ -5,7 +5,8 @@ export default function useLoading(initial: boolean = false) {
 
   const toggleLoading = useCallback(() => {
     setIsLoading((pre) => !pre);
-  }, []);
+    return isLoading;
+  }, [isLoading]);
 
   const onLoading = useCallback(() => {
     setIsLoading(true);
