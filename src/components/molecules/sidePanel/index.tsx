@@ -1,14 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import Link from "next/link";
 import { memo, ReactNode, useCallback } from "react";
 import { SIDE_PANEL_TABS } from "./helper";
 import axios from "axios";
 import { AUTH_APIS } from "@/utils/apis";
 import { useRouter } from "next/navigation";
-import { LogOut, Sparkles } from "lucide-react";
+import { LogOut, Newspaper, Sparkles } from "lucide-react";
 
 export type Tab = {
   label: string;
@@ -49,24 +48,29 @@ const SidePanel = memo(() => {
           EMAIL Geine
           <Sparkles />
         </h1>
+        Create A Project
         <div className="mt-10 flex flex-col gap-y-2">
           <Button size="lg" className="w-full mb-4">
-            Create A Project
+            <Newspaper />
+            <span>Create A Project</span>
           </Button>
           {SIDE_PANEL_TABS.map((tab, index) => (
             <Tab key={index} {...tab} />
           ))}
         </div>
       </div>
-      <Button
-        size="lg"
-        variant="destructive"
-        className="justify-start gap-x-2"
-        onClick={onLogout}
-      >
-        <LogOut />
-        <span>Logout</span>
-      </Button>
+      <div className="w-100 grid gap-y-4">
+        <hr className="text-blue-100" />
+        <Button
+          size="lg"
+          variant="destructive"
+          className="justify-start gap-x-2"
+          onClick={onLogout}
+        >
+          <LogOut />
+          <span>Logout</span>
+        </Button>
+      </div>
     </div>
   );
 });
