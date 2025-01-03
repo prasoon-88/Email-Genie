@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/config/db";
 import User from "@/models/user.model";
-import { sendVerificationEmail } from "./helper";
+import { sendVerificationEmail } from "@/utils/api/auth";
 
 connectDB(); // Ensure the database connection is established
 

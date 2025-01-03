@@ -70,7 +70,7 @@ export default function Signup() {
         <Input
           id="names"
           placeholder="Enter full name"
-          value={email}
+          value={name}
           onChange={(e) => setName(e.target.value)}
         />
       </Label>
