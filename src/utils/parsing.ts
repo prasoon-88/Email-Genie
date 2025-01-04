@@ -1,7 +1,13 @@
-import { SupportedFile } from "@/types";
 import * as xlsx from "xlsx";
 
-export const parseFile = (type: SupportedFile) => {
+export const getFileExtention = (fileName?: string) => {
+  if (!fileName) return;
+  return fileName.split(".")?.at(-1);
+};
+
+export const getFileParser = (fileName?: string) => {
+  if (!fileName) return;
+  const type = getFileExtention(fileName);
   switch (type) {
     case "csv":
     case "ods":
@@ -10,6 +16,24 @@ export const parseFile = (type: SupportedFile) => {
     case "xlsx":
       return parseXlsx;
   }
+};
+
+export const convertArrayToJSON = (data: any[]) => {
+  const pool: any[] = [];
+  if (data?.length) {
+    const header: string[] = data?.at(0) ?? [];
+    const body: string[][] = data.slice(1);
+
+    const rowData: any = {};
+    body.forEach((row) => {
+      header.forEach((col, index) => {
+        rowData[col] = row[index];
+      });
+      pool.push(rowData);
+      Object.assign(rowData, {});
+    });
+  }
+  return pool;
 };
 
 export const parseXlsx = (file: File, callBack: (data: any) => void) => {

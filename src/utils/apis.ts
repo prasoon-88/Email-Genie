@@ -5,7 +5,7 @@ const createRequest = (method: RequestMethod, url: string) => ({
   url,
 });
 
-const BASE = "api/";
+const BASE = "/api/";
 const AUTH_BASE = "users/";
 export const AUTH_APIS = {
   signUp: createRequest("POST", BASE + AUTH_BASE + "signup"),
