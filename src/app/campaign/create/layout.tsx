@@ -7,13 +7,14 @@ import useURLSearchParams from "@/hooks/common/useURLSearchParams.hook";
 import { useToast } from "@/hooks/common/use-toast";
 import axios from "axios";
 import { CAMPAIGN_APIS } from "@/utils/apis";
+import { CAMPIGN_STEP_KEY } from "@/config/campaign";
 
 const CampaignCreateLayout = ({ children }: { children: any }) => {
   const { toast } = useToast();
   const { getParams } = useURLSearchParams();
 
   const id = getParams("id");
-  const step = getParams("step");
+  const step = getParams(CAMPIGN_STEP_KEY);
   const [campaignName, setCampaignName] = useState("");
 
   // const onRetrieveData = (data: any[]) => {
