@@ -137,27 +137,6 @@ const CampaignCreateSetting = () => {
     }
   };
 
-  // const onRetrieveData = (data: any[]) => {
-  //   const jsonData = convertArrayToJSON(data);
-  //   console.log(jsonData);
-  // };
-
-  // const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   e.preventDefault();
-  //   const file = e.target?.files?.[0];
-  //   if (!file) {
-  //     toast({ title: "File Not Found" });
-  //     return;
-  //   }
-  //   const fileName = file?.name;
-  //   const parser = getFileParser(fileName);
-  //   if (!parser) {
-  //     toast({ title: "File Not Supported" });
-  //     return;
-  //   }
-  //   parser(file, onRetrieveData);
-  // };
-
   useEffect(() => {
     if (id) {
       getCampaignSettings();

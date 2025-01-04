@@ -19,3 +19,22 @@ export const CAMPAIGN_CATEGORIES: CampaignCategory[] = [
       "Reach out to companies or recruiters to inquire about potential job opportunities or specific positions.",
   },
 ];
+
+export const DEFAULT_COLS = [
+  {
+    label: "To email",
+    value: "to",
+  },
+  {
+    label: "Name",
+    value: "name",
+  },
+  {
+    label: "Name",
+    value: "Company",
+  },
+  {
+    label: "Company Address",
+    value: "company_address",
+  },
+];
