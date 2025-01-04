@@ -6,6 +6,7 @@ const createRequest = (method: RequestMethod, url: string) => ({
 });
 
 const BASE = "/api/";
+
 const AUTH_BASE = "users/";
 export const AUTH_APIS = {
   signUp: createRequest("POST", BASE + AUTH_BASE + "signup"),
@@ -13,4 +14,13 @@ export const AUTH_APIS = {
   logout: createRequest("GET", BASE + AUTH_BASE + "logout"),
   verify: createRequest("POST", BASE + AUTH_BASE + "verify"),
   info: createRequest("GET", BASE + AUTH_BASE + "info"),
+};
+
+const CAMAPIGN_BASE = "campaign/";
+export const CAMPAIGN_APIS = {
+  saveCamapign: createRequest("POST", BASE + CAMAPIGN_BASE + "{page}"),
+  getCampaignInfo: createRequest(
+    "GET",
+    BASE + CAMAPIGN_BASE + "{page}/?id={id}"
+  ),
 };

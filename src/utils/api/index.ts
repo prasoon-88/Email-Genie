@@ -7,3 +7,8 @@ export const SupportedFilesSet = new Set<SupportedFile>([
   "csv",
   "ods",
 ]);
+
+export const getURLSearchParams = (url: string) => {
+  const newUrl = new URL(url);
+  return new URLSearchParams(newUrl.searchParams);
+};

@@ -1,6 +1,8 @@
 import { CampaignCategory } from "@/types/campaign";
 import { BriefcaseBusiness, PackageCheck } from "lucide-react";
 
+export const CAMPIGN_STEP_KEY = "step";
+
 export const CAMPAIGN_CATEGORIES: CampaignCategory[] = [
   {
     type: "job-application",

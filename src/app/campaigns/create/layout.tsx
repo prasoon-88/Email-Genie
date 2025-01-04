@@ -1,12 +1,19 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
-import { convertArrayToJSON, getFileParser } from "@/utils/parsing";
-import React, { ChangeEvent, ReactNode, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CampaignNavbar from "./_components/campaignNavbar";
 import CampaignProvider from "@/providers/campaignProvider";
+import useURLSearchParams from "@/hooks/common/useURLSearchParams.hook";
+import { useToast } from "@/hooks/common/use-toast";
+import axios from "axios";
+import { CAMPAIGN_APIS } from "@/utils/apis";
 
 const CampaignCreateLayout = ({ children }: { children: any }) => {
+  const { toast } = useToast();
+  const { getParams } = useURLSearchParams();
+
+  const id = getParams("id");
+  const step = getParams("step");
   const [campaignName, setCampaignName] = useState("");
 
   // const onRetrieveData = (data: any[]) => {
@@ -30,8 +37,34 @@ const CampaignCreateLayout = ({ children }: { children: any }) => {
   //   parser(file, onRetrieveData);
   // };
 
+  const getCampaignSettings = async () => {
+    try {
+      const { url, method } = CAMPAIGN_APIS["getCampaignInfo"];
+      const resp = await axios({
+        method,
+        url: url.replace("{page}", "settings").replace("{id}", id),
+      });
+      if (resp.data) {
+        const { name } = resp?.data?.camapign ?? {};
+        setCampaignName(name);
+      }
+    } catch (error: any) {
+      const message = error?.response?.data?.message;
+      console.log(message);
+      toast({
+        title: message,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (id && step && step != "1") {
+      getCampaignSettings();
+    }
+  }, [id]);
+
   return (
-    <CampaignProvider value={{ setCampaignName, campaignName }}>
+    <CampaignProvider value={{ setCampaignName, campaignName, id }}>
       <div>
         <CampaignNavbar />
         {children}

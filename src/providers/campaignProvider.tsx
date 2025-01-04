@@ -1,8 +1,7 @@
-import useUser from "@/hooks/auth/use-user.hook";
-import useLoading from "@/hooks/common/use-loading.hook";
 import { createContext, ReactNode, useContext } from "react";
 
 interface CampaignProviderValues {
+  id?: string;
   campaignName: string;
   setCampaignName?: any;
 }
@@ -21,8 +20,6 @@ const CampaignProvider = ({
   children: ReactNode;
   value: CampaignProviderValues;
 }) => {
-  const { toggleLoading, isLoading } = useLoading();
-  const { userInfo } = useUser(toggleLoading);
   return (
     <CampaignContext.Provider value={value}>
       {children}

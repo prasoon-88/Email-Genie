@@ -3,13 +3,16 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CAMPAIGN_CATEGORIES } from "@/config/campaign";
+import { CAMPAIGN_CATEGORIES, CAMPIGN_STEP_KEY } from "@/config/campaign";
 import { useToast } from "@/hooks/common/use-toast";
+import useURLSearchParams from "@/hooks/common/useURLSearchParams.hook";
 import { useCamapignContext } from "@/providers/campaignProvider";
 import { CampaignCategory, CampaignType } from "@/types/campaign";
+import { CAMPAIGN_APIS } from "@/utils/apis";
+import axios from "axios";
 import clsx from "clsx";
 import { ChevronRightIcon } from "lucide-react";
-import React, { HTMLAttributes, useState } from "react";
+import React, { HTMLAttributes, useEffect, useState } from "react";
 
 interface CampaignCategoryExtended
   extends CampaignCategory,
@@ -68,8 +71,70 @@ const CampaignCategories = ({
 
 const CampaignCreateSetting = () => {
   const { toast } = useToast();
-  const { campaignName, setCampaignName } = useCamapignContext();
+  const { setSearchParams } = useURLSearchParams();
+
+  const { campaignName, setCampaignName, id } = useCamapignContext();
   const [category, setCategory] = useState<CampaignType>();
+
+  const onNext = async () => {
+    try {
+      const { url, method } = CAMPAIGN_APIS["saveCamapign"];
+      const resp = await axios({
+        url: url.replace("{page}", "settings"),
+        method,
+        data: {
+          name: campaignName,
+          category,
+          id,
+        },
+      });
+      if (resp.data) {
+        const { _id } = resp.data?.campaign ?? {};
+        if (!_id)
+          toast({
+            title: `Something went wrong`,
+          });
+
+        toast({
+          title: `Campaign: ${campaignName} created/updated successfully`,
+        });
+        setSearchParams(
+          new Map([
+            ["id", _id],
+            [CAMPIGN_STEP_KEY, "2"],
+          ])
+        );
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast({
+        title: "Camapign Create/Update Failed",
+        description: error?.response?.data?.message,
+      });
+    }
+  };
+
+  const getCampaignSettings = async () => {
+    if (!id) return;
+    try {
+      const { url, method } = CAMPAIGN_APIS["getCampaignInfo"];
+      const resp = await axios({
+        method,
+        url: url.replace("{page}", "settings").replace("{id}", id),
+      });
+      if (resp.data) {
+        const { name, category } = resp?.data?.camapign ?? {};
+        setCategory(category);
+        setCampaignName(name);
+      }
+    } catch (error: any) {
+      const message = error?.response?.data?.message;
+      console.log(message);
+      toast({
+        title: message,
+      });
+    }
+  };
 
   // const onRetrieveData = (data: any[]) => {
   //   const jsonData = convertArrayToJSON(data);
@@ -92,6 +157,12 @@ const CampaignCreateSetting = () => {
   //   parser(file, onRetrieveData);
   // };
 
+  useEffect(() => {
+    if (id) {
+      getCampaignSettings();
+    }
+  }, [id]);
+
   return (
     <div className="h-screen grid p-4">
       <div className="w-full md:w-6/12 xl:w-4/12 mx-auto pt-10 flex flex-col gap-4">
@@ -109,7 +180,7 @@ const CampaignCreateSetting = () => {
         </Label>
         {/* Camapign Categories */}
         <CampaignCategories setCategory={setCategory} acitve={category} />
-        <Button variant="outline">
+        <Button variant="outline" onClick={onNext}>
           {" "}
           Next <ChevronRightIcon />
         </Button>
