@@ -41,7 +41,7 @@ export default function Login() {
       toast({
         title: "Login Successful",
       });
-      router.push("/app/");
+      router.replace("/app/");
     } catch (error: any) {
       toast({
         title: "Login failed",

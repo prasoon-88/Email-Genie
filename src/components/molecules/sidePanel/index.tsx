@@ -66,7 +66,7 @@ export const Tab = ({ label, icon, link, showOnlyIcon, centerAlign }: Tab) => {
 const UserBox = ({ isOpen }: { isOpen: boolean }) => {
   const router = useRouter();
 
-  const { userInfo, isLoading } = useUserContent();
+  const { userInfo } = useUserContent();
   const { name, email } = userInfo ?? {};
   const initial = useMemo(() => getInitial(name), [name]);
 

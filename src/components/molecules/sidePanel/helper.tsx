@@ -1,4 +1,4 @@
-import { Cog, House, Target } from "lucide-react";
+import { Cog, House, SunSnow } from "lucide-react";
 import { Tab } from ".";
 
 const Base = "/app/";
@@ -17,9 +17,9 @@ export const SIDE_PANEL_TABS: Tab[] = [
     link: Base,
   },
   {
-    label: "Projects",
-    icon: <Target />,
-    link: Base + "projects/",
+    label: "Campaigns",
+    icon: <SunSnow />,
+    link: Base + "campaigns/",
   },
   {
     label: "Settings",
