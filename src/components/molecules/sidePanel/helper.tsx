@@ -1,7 +1,7 @@
 import { Cog, House, SunSnow } from "lucide-react";
 import { Tab } from ".";
 
-const Base = "/app/";
+const Base = "/";
 
 export const SIDE_PANEL_STORAGE_KEY = "panel";
 

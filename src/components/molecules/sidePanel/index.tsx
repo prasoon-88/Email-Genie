@@ -142,10 +142,12 @@ const SidePanel = memo((props: SidePanel) => {
         </h1>
 
         <div className="mt-10 flex flex-col gap-y-2">
-          <Button size="lg" className="w-full mb-4">
-            <Newspaper />
-            {isOpen ? <span>Create A Project</span> : <></>}
-          </Button>
+          <Link href="/campaigns/create/settings/">
+            <Button size="lg" className="w-full mb-4">
+              <Newspaper />
+              {isOpen ? <span>Create A Camapign</span> : <></>}
+            </Button>
+          </Link>
           {SIDE_PANEL_TABS.map((tab, index) => (
             <Tab
               key={index}

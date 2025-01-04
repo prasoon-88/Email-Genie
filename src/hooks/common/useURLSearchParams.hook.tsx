@@ -14,12 +14,15 @@ const useURLSearchParams = () => {
     [searchParams]
   );
 
-  const setSearchParams = (values: Map<string, string>) => {
+  const setSearchParams = (
+    values: Map<string, string>,
+    newPathName: string = pathName
+  ) => {
     const currParams = new URLSearchParams(searchParams.toString());
     for (let [key, value] of values) {
       currParams.set(key, value);
     }
-    router.push(pathName + "?" + currParams.toString());
+    router.push(newPathName + "?" + currParams.toString());
   };
 
   return { getParams, setSearchParams };

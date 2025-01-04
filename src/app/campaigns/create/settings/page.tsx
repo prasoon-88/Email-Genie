@@ -102,7 +102,8 @@ const CampaignCreateSetting = () => {
           new Map([
             ["id", _id],
             [CAMPIGN_STEP_KEY, "2"],
-          ])
+          ]),
+          "/campaigns/create/prospect"
         );
       }
     } catch (error: any) {
