@@ -142,7 +142,7 @@ const SidePanel = memo((props: SidePanel) => {
         </h1>
 
         <div className="mt-10 flex flex-col gap-y-2">
-          <Link href="/campaigns/create/settings/">
+          <Link href="/campaign/create/settings/">
             <Button size="lg" className="w-full mb-4">
               <Newspaper />
               {isOpen ? <span>Create A Camapign</span> : <></>}

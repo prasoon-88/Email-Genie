@@ -4,13 +4,13 @@ import { sendEmail } from "../mailer";
 import { TOKEN_KEY } from "@/config";
 import { getHasedToken } from "..";
 
-export const verifyToken = (token: string) => {
+export const verifyToken = (token?: string | null) => {
+  if (!token) return;
   try {
     return jwt.verify(token, process.env.TOKEN_SECRET!);
   } catch (error) {
     console.log(error);
   }
-  return null;
 };
 
 export const getDataFromToken = async (token: string) => {

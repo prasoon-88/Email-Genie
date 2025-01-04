@@ -103,7 +103,7 @@ const CampaignCreateSetting = () => {
             ["id", _id],
             [CAMPIGN_STEP_KEY, "2"],
           ]),
-          "/campaigns/create/prospect"
+          "/campaign/create/prospect"
         );
       }
     } catch (error: any) {

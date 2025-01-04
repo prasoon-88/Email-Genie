@@ -9,6 +9,15 @@ export async function middleware(request: NextRequest) {
   const isPublicPath = ROUTES_WITHOUT_AUTH.has(request.nextUrl.pathname);
 
   if (!token && !isPublicPath) {
+    if (request.nextUrl.pathname.includes("/api/")) {
+      return NextResponse.json(
+        {
+          error: true,
+          message: "Unauthorized",
+        },
+        { status: 401 }
+      );
+    }
     return NextResponse.redirect(new URL("/login", request.url));
   } else if (token && isPublicPath) {
     return NextResponse.redirect(new URL("/", request.url));
@@ -19,6 +28,8 @@ export async function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher:
+  matcher: [
     "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
+    "/api/campaign/:path*",
+  ],
 };

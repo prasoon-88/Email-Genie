@@ -2,6 +2,8 @@ import { connectDB } from "@/config/db";
 import { NextRequest, NextResponse } from "next/server";
 import CampaignModel, { ALLOWED_CAMPAIGN_TYPE } from "@/models/campaign.model";
 import { getURLSearchParams } from "@/utils/api";
+import { getDataFromToken } from "@/utils/api/auth";
+import { TOKEN_KEY } from "@/config";
 
 // Ensure DB is connected
 connectDB();
@@ -58,7 +60,11 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    const token = request.cookies.get(TOKEN_KEY)?.value!;
+    const user = await getDataFromToken(token);
     const { name, category, id } = body;
+
+    body.user = user._id;
 
     // Validate required fields
     const notFoundFields: string[] = [];

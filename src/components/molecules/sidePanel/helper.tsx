@@ -19,7 +19,7 @@ export const SIDE_PANEL_TABS: Tab[] = [
   {
     label: "Campaigns",
     icon: <SunSnow />,
-    link: Base + "campaigns/",
+    link: Base + "campaign-manager/",
   },
   {
     label: "Settings",

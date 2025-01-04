@@ -19,6 +19,11 @@ const CampaignSchema = new mongoose.Schema(
       },
       required: [true, "Campaign Category is Required"],
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+      required: [true, "A Campaign must associated with a user"],
+    },
   },
   {
     timestamps: true,
