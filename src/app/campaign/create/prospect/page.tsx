@@ -1,11 +1,18 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import CustomSelect from "@/components/ui/select";
+import useLoading from "@/hooks/common/use-loading.hook";
 import { useToast } from "@/hooks/common/use-toast";
+import { useCamapignContext } from "@/providers/campaignProvider";
+import { CAMPAIGN_APIS } from "@/utils/apis";
 import { convertArrayToJSON, getFileParser } from "@/utils/parsing";
+import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { Label } from "@radix-ui/react-label";
-import React, { ChangeEvent, useState } from "react";
+import axios from "axios";
+import React, { ChangeEvent, useEffect, useState } from "react";
 
 const Uploading = ({
   onRetrieveData,
@@ -55,16 +62,88 @@ const Uploading = ({
   );
 };
 
+interface Mapping {
+  mapping: Map<string, string>;
+  setMapping: any;
+  prospectData: ProspectData;
+}
+
+const Mapping = ({ mapping, setMapping, prospectData }: Mapping) => {
+  return <div></div>;
+};
+
+interface ProspectData {
+  firstRow?: any[];
+  cols?: string[];
+}
+
 const CamapignProspect = () => {
-  const onRetrieveData = (data: any[]) => {
-    const jsonData = convertArrayToJSON(data);
-    console.log(jsonData);
+  const { id: campaignId } = useCamapignContext();
+  const { toast } = useToast();
+  const { toggleLoading, isLoading } = useLoading();
+  const [isUploaded, setIsUploaded] = useState<Boolean>(false);
+  const [mapping, setMapping] = useState<Map<string, string>>(new Map());
+  const [data, setData] = useState<ProspectData>({});
+
+  const onRetrieveData = async (data: any[]) => {
+    toggleLoading();
+    const { rows, cols } = convertArrayToJSON(data);
+    try {
+      await axios({
+        ...CAMPAIGN_APIS["registerProspects"],
+        data: { campaignId, prospects: { rows, cols } },
+      });
+      setIsUploaded(true);
+    } catch (error: any) {
+      toast({ title: "Failed to upload !" });
+    } finally {
+      toggleLoading();
+    }
   };
+
+  const getRegisteredProspects = async () => {
+    toggleLoading();
+    try {
+      const { url, method } = CAMPAIGN_APIS["getRegisteredProspects"];
+      const resp = await axios({
+        method,
+        url: url.replace("{id}", campaignId!),
+      });
+      if (resp.data?.prospects) {
+        const { firstRow, cols, mapping } = resp.data.prospects;
+        if (mapping) {
+          setMapping(mapping);
+        }
+        setData({ firstRow, cols });
+        if (firstRow) {
+          setIsUploaded(true);
+        }
+      }
+    } catch (error) {
+      toast({ title: "Failed to get registered prospects" });
+    } finally {
+      toggleLoading();
+    }
+  };
+
+  useEffect(() => {
+    if (campaignId) {
+      getRegisteredProspects();
+    }
+  }, [campaignId]);
 
   return (
     <div className="h-screen grid p-4">
       <div className="w-full md:w-6/12 xl:w-4/12 mx-auto pt-10 flex flex-col gap-4">
-        <Uploading onRetrieveData={onRetrieveData} />
+        {isUploaded ? (
+          <Mapping
+            mapping={mapping}
+            setMapping={setMapping}
+            prospectData={data}
+          />
+        ) : (
+          <Uploading onRetrieveData={onRetrieveData} />
+        )}
       </div>
     </div>
   );

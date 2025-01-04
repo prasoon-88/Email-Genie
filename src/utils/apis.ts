@@ -18,10 +18,18 @@ export const AUTH_APIS = {
 
 const CAMAPIGN_BASE = "campaign/";
 export const CAMPAIGN_APIS = {
-  getAllCampaigns: createRequest("POST", BASE + CAMAPIGN_BASE + "/manager/"),
+  getAllCampaigns: createRequest("POST", BASE + CAMAPIGN_BASE + "manager/"),
   saveCamapign: createRequest("POST", BASE + CAMAPIGN_BASE + "{page}"),
   getCampaignInfo: createRequest(
     "GET",
     BASE + CAMAPIGN_BASE + "{page}/?id={id}"
+  ),
+  registerProspects: createRequest(
+    "POST",
+    BASE + CAMAPIGN_BASE + "prospects/register"
+  ),
+  getRegisteredProspects: createRequest(
+    "GET",
+    BASE + CAMAPIGN_BASE + "prospects/register?campaignId={id}"
   ),
 };

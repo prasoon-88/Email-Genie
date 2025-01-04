@@ -19,21 +19,25 @@ export const getFileParser = (fileName?: string) => {
 };
 
 export const convertArrayToJSON = (data: any[]) => {
-  const pool: any[] = [];
+  const rows: any[] = [];
+  let cols: string[] = [];
   if (data?.length) {
-    const header: string[] = data?.at(0) ?? [];
+    cols = data?.at(0) ?? [];
     const body: string[][] = data.slice(1);
 
     const rowData: any = {};
     body.forEach((row) => {
-      header.forEach((col, index) => {
+      cols.forEach((col, index) => {
         rowData[col] = row[index];
       });
-      pool.push(rowData);
+      rows.push(rowData);
       Object.assign(rowData, {});
     });
   }
-  return pool;
+  return {
+    cols,
+    rows,
+  };
 };
 
 export const parseXlsx = (file: File, callBack: (data: any) => void) => {

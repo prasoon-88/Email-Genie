@@ -24,6 +24,14 @@ const CampaignSchema = new mongoose.Schema(
       ref: "users",
       required: [true, "A Campaign must associated with a user"],
     },
+    prospects: {
+      cols: [String],
+      rows: [mongoose.Schema.Types.Mixed],
+      mapping: {
+        type: Map,
+        of: String,
+      },
+    },
   },
   {
     timestamps: true,

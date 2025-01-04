@@ -4,6 +4,7 @@ interface CampaignProviderValues {
   id?: string;
   campaignName: string;
   setCampaignName?: any;
+  campaginInfo?: any;
 }
 
 const CampaignContext = createContext<CampaignProviderValues>({
