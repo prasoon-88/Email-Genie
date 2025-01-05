@@ -1,15 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import CustomSelect from "@/components/ui/select";
 import useLoading from "@/hooks/common/use-loading.hook";
 import { useToast } from "@/hooks/common/use-toast";
 import { useCamapignContext } from "@/providers/campaignProvider";
 import { CAMPAIGN_APIS } from "@/utils/apis";
-import { convertArrayToJSON, getFileParser } from "@/utils/parsing";
-import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
+import { getFileParser } from "@/utils/parsing";
 import { Label } from "@radix-ui/react-label";
 import axios from "axios";
 import React, { ChangeEvent, useEffect, useState } from "react";
@@ -65,17 +62,13 @@ const Uploading = ({
 interface Mapping {
   mapping: Map<string, string>;
   setMapping: any;
-  prospectData: ProspectData;
+  firstRow: any[];
+  cols: any[];
 }
 
-const Mapping = ({ mapping, setMapping, prospectData }: Mapping) => {
-  return <div></div>;
+const Mapping = ({ mapping, setMapping, firstRow, cols }: Mapping) => {
+  return <div>{JSON.stringify(firstRow)}</div>;
 };
-
-interface ProspectData {
-  firstRow?: any[];
-  cols?: string[];
-}
 
 const CamapignProspect = () => {
   const { id: campaignId } = useCamapignContext();
@@ -83,17 +76,22 @@ const CamapignProspect = () => {
   const { toggleLoading, isLoading } = useLoading();
   const [isUploaded, setIsUploaded] = useState<Boolean>(false);
   const [mapping, setMapping] = useState<Map<string, string>>(new Map());
-  const [data, setData] = useState<ProspectData>({});
+  const [cols, setCols] = useState<Array<string | number>>([]);
+  const [firstRow, setFirstRow] = useState<Array<string | number>>([]);
 
   const onRetrieveData = async (data: any[]) => {
     toggleLoading();
-    const { rows, cols } = convertArrayToJSON(data);
     try {
-      await axios({
-        ...CAMPAIGN_APIS["registerProspects"],
-        data: { campaignId, prospects: { rows, cols } },
+      const resp = await axios({
+        ...CAMPAIGN_APIS["uploadCampaignProspects"],
+        data: { campaignId, upload: { fileRows: data } },
       });
-      setIsUploaded(true);
+      if (resp.data?.upload) {
+        setIsUploaded(true);
+        const { firstRow, cols } = resp.data?.upload ?? {};
+        setFirstRow(firstRow);
+        setCols(cols);
+      }
     } catch (error: any) {
       toast({ title: "Failed to upload !" });
     } finally {
@@ -104,19 +102,19 @@ const CamapignProspect = () => {
   const getRegisteredProspects = async () => {
     toggleLoading();
     try {
-      const { url, method } = CAMPAIGN_APIS["getRegisteredProspects"];
+      const { url, method } = CAMPAIGN_APIS["getCampaignUploadedProspects"];
       const resp = await axios({
         method,
         url: url.replace("{id}", campaignId!),
       });
-      if (resp.data?.prospects) {
-        const { firstRow, cols, mapping } = resp.data.prospects;
-        if (mapping) {
-          setMapping(mapping);
-        }
-        setData({ firstRow, cols });
-        if (firstRow) {
+      if (resp.data?.upload) {
+        const { cols, firstRow } = resp.data.upload;
+        if (cols) {
+          setCols(cols);
           setIsUploaded(true);
+        }
+        if (firstRow) {
+          setFirstRow(firstRow);
         }
       }
     } catch (error) {
@@ -139,7 +137,8 @@ const CamapignProspect = () => {
           <Mapping
             mapping={mapping}
             setMapping={setMapping}
-            prospectData={data}
+            cols={cols}
+            firstRow={firstRow}
           />
         ) : (
           <Uploading onRetrieveData={onRetrieveData} />

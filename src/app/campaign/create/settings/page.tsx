@@ -98,13 +98,7 @@ const CampaignCreateSetting = () => {
         toast({
           title: `Campaign: ${campaignName} created/updated successfully`,
         });
-        setSearchParams(
-          new Map([
-            ["id", _id],
-            [CAMPIGN_STEP_KEY, "2"],
-          ]),
-          "/campaign/create/prospect"
-        );
+        setSearchParams(new Map([["id", _id]]), "/campaign/create/prospect");
       }
     } catch (error: any) {
       console.log(error);

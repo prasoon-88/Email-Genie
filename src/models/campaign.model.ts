@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 export const ALLOWED_CAMPAIGN_TYPE = ["job-application", "inquiry"];
 
@@ -24,12 +24,18 @@ const CampaignSchema = new mongoose.Schema(
       ref: "users",
       required: [true, "A Campaign must associated with a user"],
     },
-    prospects: {
-      cols: [String],
-      rows: [mongoose.Schema.Types.Mixed],
+    upload: {
+      cols: {
+        type: [mongoose.Schema.Types.Mixed],
+        default: null,
+      },
+      rows: {
+        type: [mongoose.Schema.Types.Mixed],
+        default: null,
+      },
       mapping: {
         type: Map,
-        of: String,
+        default: null,
       },
     },
   },

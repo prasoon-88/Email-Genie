@@ -24,12 +24,12 @@ export const CAMPAIGN_APIS = {
     "GET",
     BASE + CAMAPIGN_BASE + "{page}/?id={id}"
   ),
-  registerProspects: createRequest(
+  uploadCampaignProspects: createRequest(
     "POST",
-    BASE + CAMAPIGN_BASE + "prospects/register"
+    BASE + CAMAPIGN_BASE + "prospects/upload"
   ),
-  getRegisteredProspects: createRequest(
+  getCampaignUploadedProspects: createRequest(
     "GET",
-    BASE + CAMAPIGN_BASE + "prospects/register?campaignId={id}"
+    BASE + CAMAPIGN_BASE + "prospects/upload?campaignId={id}"
   ),
 };
