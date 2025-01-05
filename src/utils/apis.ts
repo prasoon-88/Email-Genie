@@ -28,6 +28,10 @@ export const CAMPAIGN_APIS = {
     "POST",
     BASE + CAMAPIGN_BASE + "prospects/upload"
   ),
+  mapCampaignProspects: createRequest(
+    "POST",
+    BASE + CAMAPIGN_BASE + "prospects/mapping"
+  ),
   getCampaignUploadedProspects: createRequest(
     "GET",
     BASE + CAMAPIGN_BASE + "prospects/upload?campaignId={id}"

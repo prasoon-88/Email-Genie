@@ -20,7 +20,7 @@ export const CAMPAIGN_CATEGORIES: CampaignCategory[] = [
   },
 ];
 
-export const DEFAULT_COLS = [
+export const MAPPING_COLS = [
   {
     label: "To email",
     value: "to",
@@ -30,8 +30,8 @@ export const DEFAULT_COLS = [
     value: "name",
   },
   {
-    label: "Name",
-    value: "Company",
+    label: "Company",
+    value: "company",
   },
   {
     label: "Company Address",

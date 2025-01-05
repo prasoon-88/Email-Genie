@@ -145,20 +145,31 @@ const SelectSeparator = React.forwardRef<
 ));
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 
-const CustomSelect = () => {
+interface CustomeSelect {
+  placeholder?: string;
+  options?: { label: string; value: string }[];
+  onSelect?: (value: string) => void;
+  value?: any;
+}
+
+const CustomSelect = ({
+  placeholder,
+  options,
+  onSelect,
+  value,
+}: CustomeSelect) => {
   return (
-    <Select>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a fruit" />
+    <Select onValueChange={onSelect} defaultValue={value}>
+      <SelectTrigger>
+        <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Fruits</SelectLabel>
-          <SelectItem value="apple">Apple</SelectItem>
-          <SelectItem value="banana">Banana</SelectItem>
-          <SelectItem value="blueberry">Blueberry</SelectItem>
-          <SelectItem value="grapes">Grapes</SelectItem>
-          <SelectItem value="pineapple">Pineapple</SelectItem>
+          {options?.map(({ label, value }, index) => (
+            <SelectItem key={index} value={value}>
+              {label}
+            </SelectItem>
+          ))}
         </SelectGroup>
       </SelectContent>
     </Select>

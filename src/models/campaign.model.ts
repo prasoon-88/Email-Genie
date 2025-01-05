@@ -34,9 +34,13 @@ const CampaignSchema = new mongoose.Schema(
         default: null,
       },
       mapping: {
-        type: Map,
+        type: [mongoose.Schema.Types.Mixed],
         default: null,
       },
+    },
+    prospects: {
+      type: [mongoose.Schema.Types.Mixed],
+      default: null,
     },
   },
   {

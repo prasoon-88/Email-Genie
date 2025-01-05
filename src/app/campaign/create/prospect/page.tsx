@@ -2,6 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import CustomSelect from "@/components/ui/select";
+import { MAPPING_COLS } from "@/config/campaign";
 import useLoading from "@/hooks/common/use-loading.hook";
 import { useToast } from "@/hooks/common/use-toast";
 import { useCamapignContext } from "@/providers/campaignProvider";
@@ -9,7 +11,8 @@ import { CAMPAIGN_APIS } from "@/utils/apis";
 import { getFileParser } from "@/utils/parsing";
 import { Label } from "@radix-ui/react-label";
 import axios from "axios";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
 
 const Uploading = ({
   onRetrieveData,
@@ -66,8 +69,89 @@ interface Mapping {
   cols: any[];
 }
 
+const HEADERS = ["Columns", "Value", "Mapped with"];
+
 const Mapping = ({ mapping, setMapping, firstRow, cols }: Mapping) => {
-  return <div>{JSON.stringify(firstRow)}</div>;
+  const router = useRouter();
+  const { id } = useCamapignContext();
+  const { toast } = useToast();
+  const { toggleLoading, isLoading } = useLoading();
+
+  const selectedOptions = useMemo(() => {
+    return Array.from(mapping.values());
+  }, [mapping]);
+
+  const handleMapping = (col: string, option: string) => {
+    const preMapping = new Map<string, string>(mapping);
+    preMapping.set(col, option);
+    setMapping(preMapping);
+  };
+
+  const validate = () => {
+    return selectedOptions?.length == MAPPING_COLS.length;
+  };
+
+  const onSaveMapping = async () => {
+    if (!validate()) return;
+    toggleLoading();
+    try {
+      const resp = await axios({
+        ...CAMPAIGN_APIS["mapCampaignProspects"],
+        data: {
+          mapping: Array.from(mapping.entries()),
+          campaignId: id,
+        },
+      });
+      if (resp.data) {
+        // router.push(`/campaign/create/generation?id=${id}`);
+      }
+    } catch (error: any) {
+      toast({
+        title: error?.response?.data?.message,
+      });
+    } finally {
+      toggleLoading();
+    }
+  };
+
+  return (
+    <div className="grid gap-8">
+      <table className="table-auto text-center w-full">
+        <thead className="bg-zinc-700">
+          <tr>
+            {HEADERS.map((col, index) => (
+              <td key={index} className="text-md px-2 py-1">
+                {col}
+              </td>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {cols.map((col, index) => (
+            <tr key={index}>
+              <td className="py-4">{col}</td>
+              <td className="py-4">{firstRow[index]}</td>
+              <td className="py-4">
+                <CustomSelect
+                  placeholder="Select option"
+                  options={MAPPING_COLS.filter(
+                    ({ value }) =>
+                      mapping.has(String(index)) ||
+                      !selectedOptions.some((option) => option == value)
+                  )}
+                  onSelect={(value) => handleMapping(String(index), value)}
+                  value={mapping.get(String(index))}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <Button className="w-full" onClick={onSaveMapping} disabled={isLoading}>
+        Save Mapping
+      </Button>
+    </div>
+  );
 };
 
 const CamapignProspect = () => {
@@ -108,13 +192,16 @@ const CamapignProspect = () => {
         url: url.replace("{id}", campaignId!),
       });
       if (resp.data?.upload) {
-        const { cols, firstRow } = resp.data.upload;
+        const { cols, firstRow, mapping } = resp.data.upload;
         if (cols) {
           setCols(cols);
           setIsUploaded(true);
         }
         if (firstRow) {
           setFirstRow(firstRow);
+        }
+        if (mapping) {
+          setMapping(new Map(mapping));
         }
       }
     } catch (error) {
@@ -132,7 +219,7 @@ const CamapignProspect = () => {
 
   return (
     <div className="h-screen grid p-4">
-      <div className="w-full md:w-6/12 xl:w-4/12 mx-auto pt-10 flex flex-col gap-4">
+      <div className="w-full md:w-8/12 xl:w-6/12 mx-auto pt-10 flex flex-col gap-4">
         {isUploaded ? (
           <Mapping
             mapping={mapping}
