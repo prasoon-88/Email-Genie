@@ -1,3 +1,4 @@
+import { TONES } from "@/config/campaign";
 import mongoose, { mongo } from "mongoose";
 
 export const ALLOWED_CAMPAIGN_TYPE = ["job-application", "inquiry"];
@@ -10,6 +11,14 @@ const CampaignSchema = new mongoose.Schema(
       minLength: [10, "Campaign Name must have 10 characters"],
       maxLength: [250, "Campaign Name must not have 250 characters"],
       trim: true,
+    },
+    tone: {
+      type: String,
+      enum: {
+        values: TONES.map((tone) => tone.value),
+        message: "Invalid Tone {VALUE}",
+      },
+      required: [true, "Tone is Required"],
     },
     category: {
       type: String,

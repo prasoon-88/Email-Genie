@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const token = request.cookies.get(TOKEN_KEY)?.value!;
     const user = await getDataFromToken(token);
-    const { name, category, id } = body;
+    const { name, category, id, tone } = body;
 
     body.user = user._id;
 
@@ -73,6 +73,10 @@ export async function POST(request: NextRequest) {
     }
     if (!category) {
       notFoundFields.push("category");
+    }
+
+    if (!tone) {
+      notFoundFields.push("tone");
     }
 
     // If any required fields are missing, respond with an error

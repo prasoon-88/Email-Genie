@@ -3,7 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CAMPAIGN_CATEGORIES, CAMPIGN_STEP_KEY } from "@/config/campaign";
+import CustomSelect from "@/components/ui/select";
+import {
+  CAMPAIGN_CATEGORIES,
+  CAMPIGN_STEP_KEY,
+  TONES,
+} from "@/config/campaign";
 import { useToast } from "@/hooks/common/use-toast";
 import useURLSearchParams from "@/hooks/common/useURLSearchParams.hook";
 import { useCamapignContext } from "@/providers/campaignProvider";
@@ -75,6 +80,7 @@ const CampaignCreateSetting = () => {
 
   const { campaignName, setCampaignName, id } = useCamapignContext();
   const [category, setCategory] = useState<CampaignType>();
+  const [tone, setTone] = useState(TONES[0].value);
 
   const onNext = async () => {
     try {
@@ -86,6 +92,7 @@ const CampaignCreateSetting = () => {
           name: campaignName,
           category,
           id,
+          tone,
         },
       });
       if (resp.data) {
@@ -154,6 +161,12 @@ const CampaignCreateSetting = () => {
         </Label>
         {/* Camapign Categories */}
         <CampaignCategories setCategory={setCategory} acitve={category} />
+        <CustomSelect
+          placeholder="Select Tone"
+          options={TONES}
+          value={tone}
+          onSelect={setTone}
+        />
         <Button variant="outline" onClick={onNext}>
           {" "}
           Next <ChevronRightIcon />

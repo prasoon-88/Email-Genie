@@ -20,6 +20,29 @@ export const CAMPAIGN_CATEGORIES: CampaignCategory[] = [
   },
 ];
 
+export const TONES = [
+  {
+    label: "Friendly",
+    value: "friendly",
+  },
+  {
+    label: "Formal",
+    value: "formal",
+  },
+  {
+    label: "Casual",
+    value: "casual",
+  },
+  {
+    label: "Professional",
+    value: "professional",
+  },
+  {
+    label: "Humorous",
+    value: "humorous",
+  },
+];
+
 export const MAPPING_COLS = [
   {
     label: "To email",
