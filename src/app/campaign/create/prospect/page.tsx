@@ -103,7 +103,7 @@ const Mapping = ({ mapping, setMapping, firstRow, cols }: Mapping) => {
         },
       });
       if (resp.data) {
-        // router.push(`/campaign/create/generation?id=${id}`);
+        router.push(`/campaign/create/generation?id=${id}`);
       }
     } catch (error: any) {
       toast({
