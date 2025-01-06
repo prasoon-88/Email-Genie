@@ -45,10 +45,8 @@ const CampaignCreateLayout = ({ children }: { children: any }) => {
 
   return (
     <CampaignProvider value={{ setCampaignName, campaignName, id }}>
-      <div>
-        <CampaignNavbar />
-        {children}
-      </div>
+      <CampaignNavbar />
+      {children}
     </CampaignProvider>
   );
 };

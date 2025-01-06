@@ -1,10 +1,18 @@
 import { connectDB } from "@/config/db";
 import { NextRequest, NextResponse } from "next/server";
 import CampaignModel from "@/models/campaign.model";
+import ProspectModel from "@/models/prospects.model";
+import { TOKEN_KEY } from "@/config";
+import { getDataFromToken } from "@/utils/api/auth";
 
 connectDB();
 
-const converToJSON = (mapping: string[][], rows: string[][]) => {
+const converToJSON = (
+  mapping: string[][],
+  rows: string[][],
+  user: string,
+  campaign: string
+) => {
   const jsonDataPool: any[] = [];
   let jsonRow: any = {};
 
@@ -12,6 +20,8 @@ const converToJSON = (mapping: string[][], rows: string[][]) => {
     for (let [index, col] of mapping) {
       jsonRow[col] = row[index as any];
     }
+    jsonRow.user = user;
+    jsonRow.campaign = campaign;
     jsonDataPool.push(jsonRow);
     jsonRow = {};
   });
@@ -21,7 +31,10 @@ const converToJSON = (mapping: string[][], rows: string[][]) => {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    const token = request.cookies.get(TOKEN_KEY)?.value!;
     const { mapping, campaignId } = body ?? {};
+
+    const user = await getDataFromToken(token);
 
     if (!mapping || !campaignId)
       return NextResponse.json(
@@ -34,20 +47,26 @@ export async function POST(request: NextRequest) {
 
     let campaign = await CampaignModel.findById(campaignId);
 
-    const prospects = converToJSON(mapping, campaign.upload.rows);
+    const prospects = converToJSON(
+      mapping,
+      campaign.upload.rows,
+      user._id,
+      campaign._id
+    );
 
     campaign = await CampaignModel.findByIdAndUpdate(
       campaignId,
       {
         $set: {
           "upload.mapping": mapping,
-          prospects: prospects,
         },
       },
       {
         new: true,
       }
     );
+
+    await ProspectModel.insertMany(prospects);
 
     return NextResponse.json(
       {

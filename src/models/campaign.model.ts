@@ -47,10 +47,6 @@ const CampaignSchema = new mongoose.Schema(
         default: null,
       },
     },
-    prospects: {
-      type: [mongoose.Schema.Types.Mixed],
-      default: null,
-    },
   },
   {
     timestamps: true,

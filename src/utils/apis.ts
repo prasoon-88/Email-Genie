@@ -36,4 +36,8 @@ export const CAMPAIGN_APIS = {
     "GET",
     BASE + CAMAPIGN_BASE + "prospects/upload?campaignId={id}"
   ),
+  getCampaignRegisteredProspects: createRequest(
+    "GET",
+    BASE + CAMAPIGN_BASE + "prospects/?campaignId={id}"
+  ),
 };

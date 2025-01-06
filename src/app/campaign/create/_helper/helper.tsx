@@ -1,4 +1,4 @@
-import { Palette, ScanEye, Settings, Users } from "lucide-react";
+import { Heart, Palette, ScanEye, Settings, Users } from "lucide-react";
 
 export const CAMPAIGN_STEPS = [
   {
@@ -15,6 +15,11 @@ export const CAMPAIGN_STEPS = [
     label: "Generation",
     value: "generation",
     icon: <Palette />,
+  },
+  {
+    label: "Preview",
+    value: "preview",
+    icon: <Heart />,
   },
   {
     label: "Review",
