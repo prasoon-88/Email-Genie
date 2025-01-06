@@ -7,36 +7,15 @@ import useURLSearchParams from "@/hooks/common/useURLSearchParams.hook";
 import { useToast } from "@/hooks/common/use-toast";
 import axios from "axios";
 import { CAMPAIGN_APIS } from "@/utils/apis";
-import { CAMPIGN_STEP_KEY } from "@/config/campaign";
+import { usePathname } from "next/navigation";
 
 const CampaignCreateLayout = ({ children }: { children: any }) => {
   const { toast } = useToast();
   const { getParams } = useURLSearchParams();
 
   const id = getParams("id");
-  const step = getParams(CAMPIGN_STEP_KEY);
+  const pathName = usePathname();
   const [campaignName, setCampaignName] = useState("");
-
-  // const onRetrieveData = (data: any[]) => {
-  //   const jsonData = convertArrayToJSON(data);
-  //   console.log(jsonData);
-  // };
-
-  // const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   e.preventDefault();
-  //   const file = e.target?.files?.[0];
-  //   if (!file) {
-  //     toast({ title: "File Not Found" });
-  //     return;
-  //   }
-  //   const fileName = file?.name;
-  //   const parser = getFileParser(fileName);
-  //   if (!parser) {
-  //     toast({ title: "File Not Supported" });
-  //     return;
-  //   }
-  //   parser(file, onRetrieveData);
-  // };
 
   const getCampaignSettings = async () => {
     try {
@@ -59,7 +38,7 @@ const CampaignCreateLayout = ({ children }: { children: any }) => {
   };
 
   useEffect(() => {
-    if (id && step && step != "1") {
+    if (id && pathName != "settings") {
       getCampaignSettings();
     }
   }, [id]);

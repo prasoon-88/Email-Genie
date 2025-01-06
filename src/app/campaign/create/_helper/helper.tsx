@@ -3,22 +3,22 @@ import { Palette, ScanEye, Settings, Users } from "lucide-react";
 export const CAMPAIGN_STEPS = [
   {
     label: "Settings",
-    value: "1",
+    value: "settings",
     icon: <Settings />,
   },
   {
     label: "Prospects",
-    value: "2",
+    value: "propsects",
     icon: <Users />,
   },
   {
     label: "Generation",
-    value: "3",
+    value: "generation",
     icon: <Palette />,
   },
   {
     label: "Review",
-    value: "4",
+    value: "review",
     icon: <ScanEye />,
   },
 ];
