@@ -1,6 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Poppins } from "next/font/google";
+import { Poppins } from "next/font/google";
 import { ThemeProvider } from "@/providers/themeProvider";
 import { Toaster } from "@/components/ui/toaster";
 
