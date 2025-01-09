@@ -3,6 +3,7 @@ import User from "@/models/user.model";
 import { sendEmail } from "../mailer";
 import { TOKEN_KEY } from "@/config";
 import { getHasedToken } from "..";
+import emailQueue from "@/config/queues/emailQueue";
 
 export const verifyToken = (token?: string | null) => {
   if (!token) return;
@@ -36,11 +37,18 @@ export const sendVerificationEmail = async (userId: string) => {
       return false;
     }
     const { email } = user;
-    await sendEmail({
-      to: email,
-      subject: "User Sign up success",
-      text: `Verify using ${process.env.NEXT_PUBLIC_API_URL}verify?${TOKEN_KEY}=${verifyToken}`,
-    });
+    await emailQueue.add(
+      `verification email to ${user?.email}`,
+      {
+        to: email,
+        subject: "User Sign up success",
+        text: `Verify using ${process.env.NEXT_PUBLIC_API_URL}verify?${TOKEN_KEY}=${verifyToken}`,
+      },
+      {
+        removeOnComplete: true,
+        lifo: true,
+      }
+    );
     console.log("An Verification Email has been sent to ", email);
     return true;
   } catch (error) {
