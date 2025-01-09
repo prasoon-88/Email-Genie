@@ -8,6 +8,7 @@ const handleMail = async (job: Job<any, any, string>) => {
   console.log(`A new task with id: ${job.id} have recieved`);
   console.log(`An email with name: ${job.name} is being send `);
   console.log(`Data: ${job.data}`);
+  console.log(emailQueueConnection)
   const resp = await sendEmail(job.data);
   console.log("Mailing result : ", resp);
 };
